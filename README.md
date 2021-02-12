@@ -17,6 +17,7 @@ conda activate nlp_sarcasm
 
 ```
 pip install -r requirements.txt
+bash setup_torch.sh
 ```
 
 ### To run everything from the project root
