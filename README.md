@@ -10,8 +10,8 @@ Dayeon Oh.
 1. Create a python 3.7.9 using conda:
 
 ```
-conda create -n mcs_eval3 python=3.7.9
-conda activate mcs_eval3
+conda create -n nlp_sarcasm python=3.7.9
+conda activate nlp_sarcasm
 ```
 2. Install the required third-party Python libraries:
 
