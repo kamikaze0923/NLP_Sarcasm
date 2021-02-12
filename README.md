@@ -6,3 +6,23 @@ York Yang,
 Dennis Huang,
 Chengxi Yang,
 Dayeon Oh.
+
+1. Create a python 3.7.9 using conda:
+
+```
+conda create -n mcs_eval3 python=3.7.9
+conda activate mcs_eval3
+```
+2. Install the required third-party Python libraries:
+
+```
+pip install -r requirements.txt
+```
+
+### To run everything from the project root
+
+Export the project root directory to the $PYTHONPATH:
+
+```
+export PYTHONPATH=$PWD
+```
