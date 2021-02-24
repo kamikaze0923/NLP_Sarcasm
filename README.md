@@ -20,6 +20,15 @@ pip install -r requirements.txt
 bash setup_torch.sh
 ```
 
+3. The sarcasm dataset is registered as a submodule, to download the dataset:
+
+```
+git submodule init
+git submodule update
+```
+
+This will download the dataset to `/chengxi/sarcasm`.
+
 ### To run everything from the project root
 
 Export the project root directory to the $PYTHONPATH:

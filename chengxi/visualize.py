@@ -10,22 +10,39 @@ class Training_Info_Buffer:
         self.train_acc_buffer = []
         self.validate_acc_buffer = []
 
+    def add_info(self, loss, acc):
+        train_loss, validate_loss = loss
+        train_acc, validate_acc = acc
+        self.train_loss_buffer.append(train_loss)
+        self.validate_loss_buffer.append(validate_loss)
+        self.train_acc_buffer.append(train_acc)
+        self.validate_acc_buffer.append(validate_acc)
 
-def plot_loss(working_dir, buffer, test_result, best_acc_result, args):
-    test_loss, test_acc = test_result
 
-    plt.plot(buffer.train_loss_buffer)
-    plt.plot(buffer.validate_loss_buffer)
-    plt.scatter(args.epochs - 1, test_loss, marker="^", c='k')
-    plt.legend(["Train_loss", "Valid_loss", "Test_loss"])
+def plot_loss(working_dir, buffer):
+    loss_begin, acc_begin = buffer.validate_loss_buffer[0], buffer.validate_loss_buffer[0]
+
+    plt.plot(buffer.train_loss_buffer, c='b')
+    plt.plot(buffer.validate_loss_buffer, c='r')
+    plt.scatter(0, loss_begin, marker="^", c='k')
+    best_valid_loss = min(buffer.validate_loss_buffer)
+    scatter_x, scatter_y = buffer.validate_loss_buffer.index(best_valid_loss), best_valid_loss
+    plt.scatter(scatter_x, scatter_y, marker="^", c='k')
+    plt.annotate(text=f"{best_valid_loss: .2f}", xy=(scatter_x, scatter_y), c='k')
+    plt.grid()
+    plt.legend(["Train_loss", "Valid_loss", "Valid_loss_begin", "Valid_loss_best"])
     plt.savefig(os.path.join(working_dir, "loss.png"))
     plt.close()
 
-    best_acc, best_epoch = best_acc_result
-    plt.title(f"Best valid acc: {best_acc:.2f} in epoch {best_epoch}")
+
     plt.plot(buffer.train_acc_buffer)
     plt.plot(buffer.validate_acc_buffer)
-    plt.scatter(args.epochs - 1, test_acc, marker="^", c='k')
-    plt.legend(["Train_acc", "Valid_acc", "Test_acc"])
+    plt.scatter(0, acc_begin, marker="^", c='k')
+    best_valid_acc = max(buffer.validate_acc_buffer)
+    scatter_x, scatter_y = buffer.validate_acc_buffer.index(best_valid_acc), best_valid_acc
+    plt.scatter(scatter_x, scatter_y, marker="^", c='k')
+    plt.annotate(text=f"{best_valid_acc: .2f}", xy=(scatter_x, scatter_y), c='k')
+    plt.grid()
+    plt.legend(["Train_acc", "Valid_acc", "Valid_acc_begin", "Valid_acc_best"])
     plt.savefig(os.path.join(working_dir, "accuracy.png"))
     plt.close()

@@ -2,28 +2,29 @@ import json
 import os
 from transformers import BertTokenizer
 import torch
-from torch.utils.data import Dataset, DataLoader
-from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import Dataset
 
 
-class Sarcasm_Dataset(Dataset):
+class Sarcasm_Dataset(Dataset): # load both twitter and reddit result
 
     TRUE_LABEL = "SARCASM"
     FALSE_LABEL = "NOT_SARCASM"
 
-    def __init__(self, args, train=True, source="reddit"):
+    def __init__(self, args, train=True):
         super().__init__()
-        if source not in ["twitter", "reddit"]:
-            raise ValueError("'source' parameter in initialization must be either 'twitter' or 'reddit'")
-        data_dir = os.path.join(os.path.dirname(__file__), 'sarcasm', source)
-        assert len(os.listdir(data_dir)) == 2
-        tar_file = filter(lambda w: "train" in w if train else "test" in w, os.listdir(data_dir)).__next__()
-        print(f"\nLoading data ... {tar_file}")
-        with open(os.path.join(data_dir, tar_file), 'r') as json_file:
-            json_list = list(json_file)
+        self.data = []
+        for source in ["twitter", "reddit"]:
+            data_dir = os.path.join(os.path.dirname(__file__), 'sarcasm', source)
+            assert len(os.listdir(data_dir)) == 2
+            tar_file = filter(lambda w: "train" in w if train else "test" in w, os.listdir(data_dir)).__next__()
+            print(f"\nLoading data ... {tar_file}")
+            with open(os.path.join(data_dir, tar_file), 'r') as json_file:
+                json_list = list(json_file)
+                data = [json.loads(i) for i in json_list]
+                self.data.extend(data)
+
         if args.debug:
-            self.data = [json.loads(i) for i in json_list][:args.debug_dataset_size]
-        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+            self.data = self.data[:args.debug_dataset_size]
 
         max_context_len = 0
         for result in self.data:
@@ -38,22 +39,24 @@ class Sarcasm_Dataset(Dataset):
         print(f"Dataset length {len(self.data)}")
         print(f"The maximum context of one example is: {max_context_len}")
 
-    def __getitem__(self, item):
+        self.device = "cuda" if args.cuda else "cpu"
+        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        response = self.tokenize([one_data.get('response') for one_data in self.data])
+        self.input_ids = response['input_ids']
+        self.attention_mask = response['attention_mask']
+        self.label = torch.LongTensor(
+            [one_data.get('label') == self.TRUE_LABEL for one_data in self.data]
+        )
+
+    def __getitem__(self, i):
         """
-        :param item: The ith tweet/reddit in json
+        :param i: The ith tweet/reddit in json
         :return: The tokenized tensor of the response, and label for if it is a sarcasm
         """
-        data = self.data[item]
-        # data['context'] # this is the context a list of strings of strings, currently not used
-        tokenize_out = self.tokenize(data['response'])
-        response = tokenize_out['input_ids'].squeeze()
-        attention = tokenize_out['attention_mask'].squeeze()
-        # each sentence is tokenized individully, so the size is in (1, l)
-        label = torch.FloatTensor([data['label'] == self.TRUE_LABEL])
-        return response, attention, label
+        return self.input_ids[i], self.attention_mask[i], self.label[i]
 
     def __len__(self):
-        return len(self.data)
+        return len(self.label)
 
 
     def tokenize(self, text_batch):
@@ -63,27 +66,3 @@ class Sarcasm_Dataset(Dataset):
         """
         return self.tokenizer(text_batch, return_tensors='pt', padding=True, truncation=True)
 
-
-def pad_collate_with_args(args, batch):
-    (xx, att, yy) = zip(*batch)
-    device = "cuda:0" if args.cuda else "cpu"
-
-    xx_pad = pad_sequence(xx, batch_first=True, padding_value=0) # I make sure the tokenizer give 0 for the padding
-    att_pad = pad_sequence(att, batch_first=True, padding_value=0)
-    yy = torch.LongTensor(yy)
-
-    return xx_pad.to(device), att_pad.to(device), yy.to(device)
-
-
-
-if __name__ == "__main__":
-    # a simple debugging test to iterate over all the data
-    for train in [True, False]:
-        for source in ['reddit', 'twitter']:
-            dataset = Sarcasm_Dataset(train=train, source=source)
-            dataloader = DataLoader(dataset, batch_size=50, shuffle=True, collate_fn=pad_collate)
-            print(f"{source} training set" if train else "validation")
-            for i, data in enumerate(dataloader):
-                assert data[0].size() == data[1].size()
-                print(f"\r {i}th batch passed with size {data[0].size()}", end="", flush=True)
-            print()
