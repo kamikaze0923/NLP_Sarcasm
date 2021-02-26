@@ -27,6 +27,7 @@ class Sarcasm_Dataset(Dataset): # load both twitter and reddit result
             self.data = self.data[:args.debug_dataset_size]
 
         max_context_len = 0
+        p, n = 0, 0 # stats for positive and negative examples
         for result in self.data:
             """
             label: "SARCASM" or "NOT_SARCASM"
@@ -35,8 +36,11 @@ class Sarcasm_Dataset(Dataset): # load both twitter and reddit result
             """
             assert result['label'] in [self.TRUE_LABEL, self.FALSE_LABEL]
             max_context_len =  max(max_context_len, len(result['context']))
+            p += 1 if result['label'] == self.TRUE_LABEL else 0
+            n += 1 if result['label'] == self.FALSE_LABEL else 0
 
         print(f"Dataset length {len(self.data)}")
+        print(f"Positive examples: {p}, Negative examples: {n}")
         print(f"The maximum context of one example is: {max_context_len}")
 
         self.device = "cuda" if args.cuda else "cpu"

@@ -1,32 +1,28 @@
 import torch, argparse, os
-from transformers import AdamW # what is the difference between this and torch.optim.AdamW
-from torch.utils.data import DataLoader, ConcatDataset
+from torch.utils.data import DataLoader
 from chengxi.sarcasm_dataset import Sarcasm_Dataset
 from chengxi.sarcasm_detection import Sarcasm_Detection
 from chengxi.routine import routine
+from chengxi.optimization import get_adamw_optimizer
 from chengxi.visualize import Training_Info_Buffer, plot_loss
 
 
 
 def main(args):
     detection_model = Sarcasm_Detection()
+
     if args.cuda:
         from torch.nn import DataParallel
         detection_model = DataParallel(detection_model)
     detection_model.to("cuda" if args.cuda else "cpu")
+
+    opt_adamw = get_adamw_optimizer(args, model=detection_model)
+
     train_set = Sarcasm_Dataset(args, train=True)
     valid_set = Sarcasm_Dataset(args, train=False)
     print(f"Training set length: {len(train_set)}, Validation set length: {len(valid_set)}")
     train_loader = DataLoader(dataset=train_set, shuffle=True, batch_size=args.batch_size)
     valid_loader = DataLoader(dataset=valid_set, shuffle=False, batch_size=args.batch_size)
-
-    no_decay = ['bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in detection_model.named_parameters() if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-        {'params': [p for n, p in detection_model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
-    ]
-    opt_adamw = AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
-
 
     os.makedirs(args.save_folder, exist_ok=True)
 
@@ -46,16 +42,13 @@ def main(args):
     plot_loss(os.path.dirname(__file__), b)
 
 
-
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch-size', type=int, default=200,
+    parser.add_argument('--batch-size', type=int, default=100,
                         help='Batch size.')
-    parser.add_argument('--epochs', type=int, default=50,
+    parser.add_argument('--epochs', type=int, default=20,
                         help='Number of training epochs.')
-    parser.add_argument('--learning-rate', type=float, default=1e-5,
+    parser.add_argument('--learning-rate', type=float, default=1e-3,
                         help='Learning rate.')
     parser.add_argument('--no-cuda', action='store_true', default=False,
                         help='Disable CUDA training.')
@@ -64,6 +57,8 @@ if __name__ == "__main__":
     parser.add_argument('--save-folder', type=str,
                         default='chengxi/checkpoints',
                         help='Path to checkpoints.')
+    # parser.add_argument('--only-train-classification-head', action='store_true', default=True,
+    #                     help='Only training the classification head of BERT')
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Reduce the dataset for faster local debugging')
     parser.add_argument('--debug-dataset-size', type=int, default=20,
@@ -71,10 +66,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()
+    if not args.cuda:
+        args.debug = True
 
     if args.debug:
         args.batch_size = 5
-        args.epochs = 20
+        args.epochs = 10
         args.debug_dataset_size = 20
 
     if args.cuda:

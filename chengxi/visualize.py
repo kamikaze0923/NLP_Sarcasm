@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 
 class Training_Info_Buffer:
@@ -20,7 +21,7 @@ class Training_Info_Buffer:
 
 
 def plot_loss(working_dir, buffer):
-    loss_begin, acc_begin = buffer.validate_loss_buffer[0], buffer.validate_loss_buffer[0]
+    loss_begin, acc_begin = buffer.validate_loss_buffer[0], buffer.validate_acc_buffer[0]
 
     plt.plot(buffer.train_loss_buffer, c='b')
     plt.plot(buffer.validate_loss_buffer, c='r')
@@ -31,12 +32,13 @@ def plot_loss(working_dir, buffer):
     plt.annotate(text=f"{best_valid_loss: .2f}", xy=(scatter_x, scatter_y), c='k')
     plt.grid()
     plt.legend(["Train_loss", "Valid_loss", "Valid_loss_begin", "Valid_loss_best"])
-    plt.savefig(os.path.join(working_dir, "loss.png"))
+    plt.xticks(range(len(buffer.train_loss_buffer)))
+    plt.savefig(os.path.join(working_dir, "fine_tune_result/loss.png"))
     plt.close()
 
 
-    plt.plot(buffer.train_acc_buffer)
-    plt.plot(buffer.validate_acc_buffer)
+    plt.plot(buffer.train_acc_buffer, c='b')
+    plt.plot(buffer.validate_acc_buffer, c='r')
     plt.scatter(0, acc_begin, marker="^", c='k')
     best_valid_acc = max(buffer.validate_acc_buffer)
     scatter_x, scatter_y = buffer.validate_acc_buffer.index(best_valid_acc), best_valid_acc
@@ -44,5 +46,6 @@ def plot_loss(working_dir, buffer):
     plt.annotate(text=f"{best_valid_acc: .2f}", xy=(scatter_x, scatter_y), c='k')
     plt.grid()
     plt.legend(["Train_acc", "Valid_acc", "Valid_acc_begin", "Valid_acc_best"])
-    plt.savefig(os.path.join(working_dir, "accuracy.png"))
+    plt.xticks(range(len(buffer.train_acc_buffer)))
+    plt.savefig(os.path.join(working_dir, "fine_tune_result/accuracy.png"))
     plt.close()
