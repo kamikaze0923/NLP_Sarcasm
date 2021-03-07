@@ -1,0 +1,43 @@
+  0%|                                                                                                                                                                                                      | 0/10 [00:00<?, ?it/s]TypeError("forward() got an unexpected keyword argument 'attention_mask'")
+> [0;32m/home/zijiao/anaconda3/envs/dnlp/lib/python3.8/site-packages/torch/nn/modules/module.py[0m(727)[0;36m_call_impl[0;34m()[0m
+[0;32m    726 [0;31m        [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m--> 727 [0;31m            [0mresult[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mforward[0m[0;34m([0m[0;34m*[0m[0minput[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    728 [0;31m        for hook in itertools.chain(
+[0m
+[1;32m    722 [0m                    [0mresult[0m [0;34m=[0m [0;34m([0m[0mresult[0m[0;34m,[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    723 [0m                [0minput[0m [0;34m=[0m [0mresult[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    724 [0m        [0;32mif[0m [0mtorch[0m[0;34m.[0m[0m_C[0m[0;34m.[0m[0m_get_tracing_state[0m[0;34m([0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    725 [0m            [0mresult[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_slow_forward[0m[0;34m([0m[0;34m*[0m[0minput[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    726 [0m        [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 727 [0;31m            [0mresult[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mforward[0m[0;34m([0m[0;34m*[0m[0minput[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    728 [0m        for hook in itertools.chain(
+[1;32m    729 [0m                [0m_global_forward_hooks[0m[0;34m.[0m[0mvalues[0m[0;34m([0m[0;34m)[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    730 [0m                self._forward_hooks.values()):
+[1;32m    731 [0m            [0mhook_result[0m [0;34m=[0m [0mhook[0m[0;34m([0m[0mself[0m[0;34m,[0m [0minput[0m[0;34m,[0m [0mresult[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    732 [0m            [0;32mif[0m [0mhook_result[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+> [0;32m/home/zijiao/anaconda3/envs/dnlp/lib/python3.8/site-packages/transformers/trainer.py[0m(1334)[0;36mcompute_loss[0;34m()[0m
+[0;32m   1333 [0;31m            [0mlabels[0m [0;34m=[0m [0;32mNone[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m-> 1334 [0;31m        [0moutputs[0m [0;34m=[0m [0mmodel[0m[0;34m([0m[0;34m**[0m[0minputs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m   1335 [0;31m        [0;31m# Save past state if it exists[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0m
+> [0;32m/home/zijiao/anaconda3/envs/dnlp/lib/python3.8/site-packages/transformers/trainer.py[0m(1304)[0;36mtraining_step[0;34m()[0m
+[0;32m   1303 [0;31m        [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m-> 1304 [0;31m            [0mloss[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mcompute_loss[0m[0;34m([0m[0mmodel[0m[0;34m,[0m [0minputs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m   1305 [0;31m[0;34m[0m[0m
+[0m
+> [0;32m/home/zijiao/anaconda3/envs/dnlp/lib/python3.8/site-packages/transformers/trainer.py[0m(940)[0;36mtrain[0;34m()[0m
+[0;32m    939 [0;31m                [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m--> 940 [0;31m                    [0mtr_loss[0m [0;34m+=[0m [0mself[0m[0;34m.[0m[0mtraining_step[0m[0;34m([0m[0mmodel[0m[0;34m,[0m [0minputs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    941 [0;31m                [0mself[0m[0;34m.[0m[0m_total_flos[0m [0;34m+=[0m [0mself[0m[0;34m.[0m[0mfloating_point_ops[0m[0;34m([0m[0minputs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+> [0;32m/home/zijiao/research/class/sarcasm_gen/model/train.py[0m(119)[0;36mmain[0;34m()[0m
+[0;32m    118 [0;31m[0;34m[0m[0m
+[0m[0;32m--> 119 [0;31m    [0mtrainer[0m[0;34m.[0m[0mtrain[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    120 [0;31m    [0mtrainer[0m[0;34m.[0m[0msave_model[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+> [0;32m/home/zijiao/research/class/sarcasm_gen/model/train.py[0m(125)[0;36m<module>[0;34m()[0m
+[0;32m    123 [0;31m[0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m'__main__'[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    124 [0;31m    [0;32mwith[0m [0mlaunch_ipdb_on_exception[0m[0;34m([0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m--> 125 [0;31m        [0mmain[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m

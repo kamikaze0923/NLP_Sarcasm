@@ -2,9 +2,13 @@ from dataclasses import dataclass
 from typing import Union, Optional, List, Dict
 
 import torch
-from transformers import PreTrainedTokenizerBase
+from transformers import PreTrainedTokenizerBase, GPT2Tokenizer
 from transformers.tokenization_utils_base import PaddingStrategy
 
+START_SAR = '<|s_sar|>'
+END_SAR = '<|e_sar|>'
+START_INT = '<|s_int|>'
+END_INT = '<|e_int|>'
 
 @dataclass
 class SarcasmCollator:
@@ -34,7 +38,7 @@ class SarcasmCollator:
     """
 
     tokenizer: PreTrainedTokenizerBase
-    padding: Union[bool, str, PaddingStrategy] = True
+    padding: Union[bool, str, PaddingStrategy] = False
     max_length: Optional[int] = None
     pad_to_multiple_of: Optional[int] = None
 
@@ -54,3 +58,20 @@ class SarcasmCollator:
             batch["labels"] = batch["label_ids"]
             del batch["label_ids"]
         return batch
+
+def process_tokenizer(tokenizer):
+
+    tokenizer.add_special_tokens({'additional_special_tokens': [START_SAR,
+                                                                END_SAR,
+                                                                START_INT,
+                                                                END_INT]})
+    tokenizer.start_sarcasm_token = START_SAR
+    tokenizer.end_sarcasm_token = END_SAR
+    tokenizer.start_intent_token = START_INT
+    tokenizer.end_intent_token = END_INT
+
+    return tokenizer
+
+def load_tokenizer(data_path):
+    tokenizer = GPT2Tokenizer.from_pretrained('gpt2', do_lower_case=True)
+    return process_tokenizer(tokenizer)

@@ -1,0 +1,29 @@
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_setup.py:_flush():69] setting env: {}
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_init.py:_log_setup():334] Logging user logs to /home/zijiao/research/class/sarcasm_gen/model/wandb/offline-run-20210305_233953-t8gnj3u7/logs/debug.log
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_init.py:_log_setup():335] Logging internal logs to /home/zijiao/research/class/sarcasm_gen/model/wandb/offline-run-20210305_233953-t8gnj3u7/logs/debug-internal.log
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_init.py:_jupyter_setup():285] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x7f5ee36794f0>
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_init.py:init():367] calling init triggers
+2021-03-05 23:39:53,117 INFO    MainThread:1255564 [wandb_init.py:init():372] wandb.init called with sweep_config: {}
+config: {'output_dir': '../results', 'overwrite_output_dir': False, 'do_train': False, 'do_eval': 'None', 'do_predict': False, 'evaluation_strategy': 'epoch', 'prediction_loss_only': False, 'per_device_train_batch_size': 32, 'per_device_eval_batch_size': 32, 'per_gpu_train_batch_size': 'None', 'per_gpu_eval_batch_size': 'None', 'gradient_accumulation_steps': 1, 'eval_accumulation_steps': 'None', 'learning_rate': 0.001, 'weight_decay': 0.0, 'adam_beta1': 0.9, 'adam_beta2': 0.999, 'adam_epsilon': 1e-08, 'max_grad_norm': 1.0, 'num_train_epochs': 10, 'max_steps': -1, 'lr_scheduler_type': 'linear', 'warmup_steps': 0, 'logging_dir': 'runs/Mar05_23-39-52_Zijiao-pc', 'logging_first_step': False, 'logging_steps': 500, 'save_steps': 500, 'save_total_limit': 1, 'no_cuda': False, 'seed': 42, 'fp16': False, 'fp16_opt_level': '01', 'fp16_backend': 'auto', 'local_rank': -1, 'tpu_num_cores': 'None', 'tpu_metrics_debug': False, 'debug': False, 'dataloader_drop_last': False, 'eval_steps': 500, 'dataloader_num_workers': 0, 'past_index': -1, 'run_name': '../results', 'disable_tqdm': False, 'remove_unused_columns': True, 'label_names': 'None', 'load_best_model_at_end': True, 'metric_for_best_model': 'loss', 'greater_is_better': False, 'ignore_data_skip': False, 'sharded_ddp': False, 'deepspeed': 'None', 'label_smoothing_factor': 0.0, 'adafactor': False, 'group_by_length': False, 'report_to': "['wandb']", 'ddp_find_unused_parameters': 'None', 'dataloader_pin_memory': True, '_n_gpu': 1, 'train_batch_size': 32, 'eval_batch_size': 32}
+2021-03-05 23:39:53,118 INFO    MainThread:1255564 [wandb_init.py:init():416] starting backend
+2021-03-05 23:39:53,118 INFO    MainThread:1255564 [backend.py:_multiprocessing_setup():69] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-03-05 23:39:53,131 INFO    MainThread:1255564 [backend.py:ensure_launched():123] starting backend process...
+2021-03-05 23:39:53,145 INFO    MainThread:1255564 [backend.py:ensure_launched():127] started backend process with pid: 1256322
+2021-03-05 23:39:53,145 INFO    MainThread:1255564 [wandb_init.py:init():421] backend started and connected
+2021-03-05 23:39:53,147 INFO    MainThread:1255564 [wandb_init.py:init():461] updated telemetry
+2021-03-05 23:39:53,148 INFO    MainThread:1255564 [wandb_init.py:init():518] starting run threads in backend
+2021-03-05 23:39:53,469 INFO    MainThread:1255564 [wandb_run.py:_console_start():1476] atexit reg
+2021-03-05 23:39:53,470 INFO    MainThread:1255564 [wandb_run.py:_redirect():1339] redirect: SettingsConsole.WRAP
+2021-03-05 23:39:53,470 INFO    MainThread:1255564 [wandb_run.py:_redirect():1374] Wrapping output streams.
+2021-03-05 23:39:53,470 INFO    MainThread:1255564 [wandb_run.py:_redirect():1390] Redirects installed.
+2021-03-05 23:39:53,470 INFO    MainThread:1255564 [wandb_init.py:init():542] run started, returning control to user process
+2021-03-05 23:39:53,470 INFO    MainThread:1255564 [wandb_watch.py:watch():39] Watching
+2021-03-05 23:40:17,078 INFO    MainThread:1255564 [wandb_run.py:_atexit_cleanup():1446] got exitcode: 0
+2021-03-05 23:40:17,079 INFO    MainThread:1255564 [wandb_run.py:_restore():1418] restore
+2021-03-05 23:40:17,080 INFO    MainThread:1255564 [wandb_run.py:_wait_for_finish():1568] got exit ret: 
+2021-03-05 23:40:19,083 INFO    MainThread:1255564 [wandb_run.py:_wait_for_finish():1568] got exit ret: done: true
+exit_result {
+}
+
+2021-03-05 23:40:20,149 INFO    MainThread:1255564 [wandb_run.py:_show_summary():1723] rendering summary
+2021-03-05 23:40:20,149 INFO    MainThread:1255564 [wandb_run.py:_show_history():1761] rendering history
