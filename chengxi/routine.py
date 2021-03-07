@@ -24,11 +24,9 @@ def routine(args, dataloader, model, optimizer=None):
             model.train()
             optimizer.zero_grad()
             out = model(*batch) # batch = (input_ids, attention_mask, labels)
-            # print(out.loss.mean())
-            # exit(0)
             if args.cuda:
-                out.loss = out.loss.mean()
-            out.loss.backward() # multiple loss returned when using multiple gpu
+                out.loss = out.loss.mean() # multiple loss returned when using multiple gpu
+            out.loss.backward()
             optimizer.step()
         else:
             model.eval()

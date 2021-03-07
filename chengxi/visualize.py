@@ -1,7 +1,5 @@
 import os
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
-
 
 class Training_Info_Buffer:
 
@@ -33,7 +31,7 @@ def plot_loss(working_dir, buffer):
     plt.grid()
     plt.legend(["Train_loss", "Valid_loss", "Valid_loss_begin", "Valid_loss_best"])
     plt.xticks(range(len(buffer.train_loss_buffer)))
-    plt.savefig(os.path.join(working_dir, "fine_tune_result/loss.png"))
+    plt.savefig(os.path.join(working_dir, "ft_loss.png"))
     plt.close()
 
 
@@ -47,5 +45,5 @@ def plot_loss(working_dir, buffer):
     plt.grid()
     plt.legend(["Train_acc", "Valid_acc", "Valid_acc_begin", "Valid_acc_best"])
     plt.xticks(range(len(buffer.train_acc_buffer)))
-    plt.savefig(os.path.join(working_dir, "fine_tune_result/accuracy.png"))
+    plt.savefig(os.path.join(working_dir, "ft_accuracy.png"))
     plt.close()

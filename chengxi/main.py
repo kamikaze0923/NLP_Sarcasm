@@ -7,7 +7,6 @@ from chengxi.optimization import get_adamw_optimizer
 from chengxi.visualize import Training_Info_Buffer, plot_loss
 
 
-
 def main(args):
     detection_model = Sarcasm_Detection()
 

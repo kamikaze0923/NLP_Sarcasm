@@ -1,2 +1,5 @@
 matplotlib==3.3.4
 transformers==4.3.2
+ipdb==0.13.5
+jsonlines==2.0.0
+wandb==0.10.21
