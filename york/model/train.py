@@ -11,11 +11,11 @@ from data import SarcasmDataset
 from model import SarcasmGPT2
 import torch
 import argparse
-from transformers import GPT2Config, TrainingArguments, Trainer
+from transformers import GPT2Config, TrainingArguments, Trainer, GPT2Tokenizer, GPT2LMHeadModel
 
 import logging
 
-from utils import SarcasmCollator
+from utils import SarcasmCollator, process_tokenizer
 
 logger = logging.getLogger(__name__)
 os.environ['WANDB_PROJECT'] = 'sarcasm_gpt2'
@@ -67,7 +67,10 @@ def main():
     # args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     control_seeds(1994)
 
-    tokenizer = SarcasmTokenizer.from_pretrained('gpt2', do_lower_case=True)
+    tokenizer = GPT2Tokenizer.from_pretrained('gpt2', do_lower_case=True)
+    # add sarcasm related tokens to tokenizer
+    tokenizer = process_tokenizer(tokenizer)
+
     train_data_path = os.path.join(args.data_dir, 'train.jsonl')
     val_data_path = os.path.join(args.data_dir, 'val.jsonl')
 
@@ -82,7 +85,9 @@ def main():
     # single_instance = Subset(train_dataset, subset_indices)
 
     config = GPT2Config.from_pretrained('gpt2')
-    model = SarcasmGPT2(config, tokenizer)  # ! need
+    model = GPT2LMHeadModel.from_pretrained('gpt2', config=config)
+    # model = SarcasmGPT2(config)  # ! need
+    model.resize_token_embeddings(len(tokenizer))
     model.to(args.device)
 
     # ! all this steps are automatically achieved by huggingface transformer
